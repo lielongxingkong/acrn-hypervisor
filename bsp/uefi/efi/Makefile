@@ -61,6 +61,7 @@ LDSCRIPT := $(LIBDIR)/elf_$(ARCH)_efi.lds
 CFLAGS=-I. -I.. -I$(INCDIR)/efi -I$(INCDIR)/efi/$(ARCH) \
 		-DEFI_FUNCTION_WRAPPER -fPIC -fshort-wchar -ffreestanding \
 		-Wall -I../fs/ -D$(ARCH)
+CFLAGS += -O0 -ggdb
 
 ifeq ($(ARCH),ia32)
 	ifeq ($(HOST),x86_64)
@@ -90,6 +91,7 @@ $(EFI_OBJDIR)/boot.efi: $(EFI_OBJDIR)/boot.so
 
 $(EFI_OBJDIR)/boot.so: $(ACRN_OBJS) $(FS)
 	$(LD) $(LDFLAGS) -o $@ $^  -lgnuefi -lefi $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
+	$(OBJCOPY) --only-keep-debug $@ $(EFI_OBJDIR)/boot.debuginfo
 
 install-conf: $(CONF_FILE)
 	install -d $(DESTDIR)/usr/share/acrn/demo

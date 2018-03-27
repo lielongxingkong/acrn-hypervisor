@@ -28,8 +28,9 @@ CFLAGS += -fshort-wchar -ffreestanding
 CFLAGS += -m64
 CFLAGS += -mno-red-zone
 CFLAGS += -static -nostdinc -nostdlib -fno-common
-CFLAGS += -O2 -D_FORTIFY_SOURCE=2
+CFLAGS += -O0 -D_FORTIFY_SOURCE=2
 CFLAGS += -Wformat -Wformat-security
+CFLAGS += -ggdb
 
 ifdef STACK_PROTECTOR
 ifeq (true, $(shell [ $(GCC_MAJOR) -gt 4 ] && echo true))
@@ -202,6 +203,7 @@ $(HV_OBJDIR)/$(HV_FILE).bin: $(HV_OBJDIR)/$(HV_FILE).out
 $(HV_OBJDIR)/$(HV_FILE).out: $(C_OBJS) $(S_OBJS)
 	$(CC) -E -x c $(patsubst %, -I%, $(INCLUDE_PATH)) $(ARCH_LDSCRIPT_IN) | grep -v '^#' > $(ARCH_LDSCRIPT)
 	$(LD) -Wl,-Map=$(HV_OBJDIR)/$(HV_FILE).map -o $@ $(LDFLAGS) $(ARCH_LDFLAGS) -T$(ARCH_LDSCRIPT) $^
+	$(POSTLD) --only-keep-debug $@ $(HV_OBJDIR)/$(HV_FILE).debuginfo
 
 .PHONY: clean
 clean:
