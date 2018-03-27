@@ -1,0 +1,14 @@
+echo + file build/bsp/uefi/efi/boot.efi\n
+file build/bsp/uefi/efi/boot.efi
+
+echo + add-symbol-file build/bsp/uefi/efi/boot.debuginfo 0x3EA47000 -s .data 0x3EA50000\n
+add-symbol-file build/bsp/uefi/efi/boot.debuginfo 0x3EA47000 -s .data 0x3EA50000
+
+echo + add-symbol-file build/acrn.debuginfo 0x20001000\n
+add-symbol-file build/acrn.debuginfo 0x20001000
+
+echo + target remote localhost:1234\n
+target remote localhost:1234
+
+#echo + set variable wait = 0\n
+#set variable wait = 0
