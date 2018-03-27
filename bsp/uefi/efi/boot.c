@@ -565,6 +565,13 @@ efi_main(EFI_HANDLE image, EFI_SYSTEM_TABLE *_table)
 	if (err != EFI_SUCCESS)
 		goto failed;
 
+	Print(L"Image base: 0x%lx\n", info->ImageBase);
+
+	int wait = 1;
+	while(wait) {
+		__asm__ __volatile__("pause");
+	}
+
 	options = info->LoadOptions;
 	options_size = info->LoadOptionsSize;
 
